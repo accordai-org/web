@@ -20,7 +20,7 @@ import {
   Server,
   Lock,
   FileText,
-  Github,
+  GitFork,
 } from "@lucide/vue";
 
 useSeoMeta({
@@ -606,7 +606,7 @@ const tiers = [
         <div v-reveal class="mt-4 flex flex-col justify-between gap-6 rounded-[20px] bg-[#121212] p-8 text-white md:flex-row md:items-center md:p-10">
           <div class="flex items-start gap-4">
             <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-white/10 text-white">
-              <Github :size="22" :stroke-width="1.7" />
+              <GitFork :size="22" :stroke-width="1.7" />
             </span>
             <div>
               <h3 class="font-sans m-0 text-[19px] font-semibold text-white">Open source at the core</h3>
