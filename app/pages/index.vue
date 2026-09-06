@@ -22,6 +22,7 @@ import {
   FileText,
   GitFork,
 } from "@lucide/vue";
+import { SmoothCorners } from "@lisse/vue";
 
 useSeoMeta({
   title: "Accord — Describe the work. Accord builds the agent.",
@@ -307,24 +308,28 @@ const tiers = [
           text — Accord assembles the workflow, tools, and memory, then runs it in production.
         </p>
         <div class="hero-enter mt-8 flex items-center justify-center gap-3 max-sm:flex-col max-sm:items-stretch" style="animation-delay: 180ms;">
-          <NuxtLink
-            to="/use/agent"
-            class="font-sans group inline-flex items-center justify-center gap-1.5 rounded-[16px] bg-[#121212] px-6 py-2.5 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#3F3F3F]"
-          >
-            Start building
-            <ArrowRight :size="15" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
-          </NuxtLink>
-          <a
-            href="#platform"
-            class="font-sans inline-flex items-center justify-center rounded-[16px] border border-[#E3E3E3] bg-white px-6 py-2.5 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
-          >
-            See the platform
-          </a>
+          <SmoothCorners as-child :corners="{ radius: 16, smoothing: 0.6 }">
+            <NuxtLink
+              to="/use/agent"
+              class="font-sans group inline-flex items-center justify-center gap-1.5 rounded-[16px] bg-[#121212] px-6 py-2.5 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#3F3F3F]"
+            >
+              Start building
+              <ArrowRight :size="15" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
+            </NuxtLink>
+          </SmoothCorners>
+          <SmoothCorners as-child :corners="{ radius: 16, smoothing: 0.6 }">
+            <a
+              href="#platform"
+              class="font-sans inline-flex items-center justify-center rounded-[16px] border border-[#E3E3E3] bg-white px-6 py-2.5 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
+            >
+              See the platform
+            </a>
+          </SmoothCorners>
         </div>
 
         <!-- Builder mock -->
         <div class="hero-enter mx-auto mt-14 max-w-[680px] text-left" style="animation-delay: 270ms;">
-          <div class="rounded-[20px] border border-[#E3E3E3] bg-white p-2 shadow-[0_16px_50px_rgba(0,0,0,0.08)]">
+          <SmoothCorners :corners="{ radius: 20, smoothing: 0.6 }" class="rounded-[20px] border border-[#E3E3E3] bg-white p-2 shadow-[0_16px_50px_rgba(0,0,0,0.08)]">
             <div class="flex items-center gap-1.5 border-b border-[#F4F4F4] px-3 py-2.5" aria-hidden="true">
               <span class="h-2.5 w-2.5 rounded-full bg-[#E3E3E3]" />
               <span class="h-2.5 w-2.5 rounded-full bg-[#E3E3E3]" />
@@ -335,45 +340,52 @@ const tiers = [
               <label for="hero-demo-prompt" class="font-sans mb-1.5 block px-1 text-xs font-medium text-[#8A8A8A]">
                 What should your agent do?
               </label>
-              <textarea
-                id="hero-demo-prompt"
-                v-model="demoPrompt"
-                rows="3"
-                :placeholder="typedText || heroSamples[0]"
-                class="font-sans box-border w-full resize-none rounded-[12px] border-0 bg-[#FAFAFA] px-3 py-2.5 text-sm leading-relaxed text-[#121212] outline-0 placeholder:text-[#8A8A8A] focus:bg-[#F4F4F4]"
-                @focus="heroFocused = true"
-                @blur="heroFocused = false"
-              />
+              <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+                <textarea
+                  id="hero-demo-prompt"
+                  v-model="demoPrompt"
+                  rows="3"
+                  :placeholder="typedText || heroSamples[0]"
+                  class="font-sans box-border w-full resize-none rounded-[12px] border-0 bg-[#FAFAFA] px-3 py-2.5 text-sm leading-relaxed text-[#121212] outline-0 placeholder:text-[#8A8A8A] focus:bg-[#F4F4F4]"
+                  @focus="heroFocused = true"
+                  @blur="heroFocused = false"
+                />
+              </SmoothCorners>
               <div class="flex items-center justify-between gap-2 p-1.5 max-sm:flex-col max-sm:items-stretch">
                 <div class="flex flex-wrap gap-1.5" aria-label="Agent building blocks">
-                  <span
+                  <SmoothCorners
                     v-for="chip in demoChips"
                     :key="chip"
-                    class="font-sans rounded-full border border-[#E3E3E3] px-3 py-[5px] text-xs text-[#5F5F5F]"
+                    :corners="{ radius: 999, smoothing: 0.6 }"
+                    class="font-sans rounded-full border border-[#E3E3E3] bg-white px-3 py-[5px] text-xs text-[#5F5F5F]"
                   >
                     + {{ chip }}
-                  </span>
+                  </SmoothCorners>
                 </div>
-                <NuxtLink
-                  to="/use/agent"
-                  class="font-sans inline-flex shrink-0 items-center justify-center gap-1 rounded-[12px] bg-[#121212] px-4 py-1.5 text-xs font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]"
-                >
-                  Build agent <span aria-hidden="true">→</span>
-                </NuxtLink>
+                <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+                  <NuxtLink
+                    to="/use/agent"
+                    class="font-sans inline-flex shrink-0 items-center justify-center gap-1 rounded-[12px] bg-[#121212] px-4 py-1.5 text-xs font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]"
+                  >
+                    Build agent <span aria-hidden="true">→</span>
+                  </NuxtLink>
+                </SmoothCorners>
               </div>
             </div>
-          </div>
+          </SmoothCorners>
           <div class="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4">
-            <button
-              v-for="s in demoSuggestions"
-              :key="s.title"
-              type="button"
-              class="flex cursor-pointer flex-col gap-1 rounded-[14px] border border-[#E3E3E3] bg-white p-3 text-left transition-colors duration-100 hover:border-[#121212]"
-              @click="demoPrompt = s.desc"
-            >
-              <span class="font-sans text-[13px] font-medium text-[#121212]">{{ s.title }}</span>
-              <span class="font-sans text-xs leading-relaxed text-[#6B6B6B]">{{ s.desc }}</span>
-            </button>
+            <div v-for="s in demoSuggestions" :key="s.title" class="h-full">
+              <SmoothCorners
+                as="button"
+                type="button"
+                :corners="{ radius: 14, smoothing: 0.6 }"
+                class="flex h-full w-full cursor-pointer flex-col gap-1 rounded-[14px] border border-[#E3E3E3] bg-white p-3 text-left transition-colors duration-100 hover:bg-[#F4F4F4]"
+                @click="demoPrompt = s.desc"
+              >
+                <span class="font-sans text-[13px] font-medium text-[#121212]">{{ s.title }}</span>
+                <span class="font-sans text-xs leading-relaxed text-[#6B6B6B]">{{ s.desc }}</span>
+              </SmoothCorners>
+            </div>
           </div>
           <p class="font-sans mt-3 text-center text-xs text-[#8A8A8A]">
             Interactive preview — <NuxtLink to="/use/agent" class="text-[#273BE2] no-underline hover:underline">open the real builder</NuxtLink>
@@ -398,10 +410,12 @@ const tiers = [
               <p class="font-sans m-0 mt-3 max-w-[400px] text-[15px] leading-relaxed text-[#5F5F5F]">
                 {{ features[activeFeature].desc }}
               </p>
-              <NuxtLink :to="features[activeFeature].to" class="font-sans group mt-6 inline-flex items-center gap-1.5 rounded-[14px] bg-[#121212] px-5 py-2 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]">
-                {{ features[activeFeature].cta }}
-                <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
-              </NuxtLink>
+              <SmoothCorners as-child :corners="{ radius: 14, smoothing: 0.6 }">
+                <NuxtLink :to="features[activeFeature].to" class="font-sans group mt-6 inline-flex items-center gap-1.5 rounded-[14px] bg-[#121212] px-5 py-2 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]">
+                  {{ features[activeFeature].cta }}
+                  <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
+                </NuxtLink>
+              </SmoothCorners>
             </div>
             <div class="mt-10 flex gap-2" aria-hidden="true">
               <span
@@ -426,29 +440,35 @@ const tiers = [
             <article
               v-for="(f, i) in features"
               :key="f.title"
-              class="showcase-card flex flex-col rounded-[20px] border border-[#E3E3E3] bg-white p-8 shadow-[0_16px_50px_rgba(0,0,0,0.08)] md:absolute md:inset-0 md:p-10"
+              class="showcase-card md:absolute md:inset-0"
             >
-              <div class="flex items-start justify-between">
-                <span class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#121212] text-white">
-                  <component :is="f.icon" :size="22" :stroke-width="1.7" />
-                </span>
-                <span class="font-sans text-sm font-semibold text-[#8A8A8A]">{{ f.index }}</span>
-              </div>
-              <h3 class="font-sans m-0 mt-6 text-[26px] font-semibold leading-[1.1] text-[#121212]">{{ f.title }}</h3>
-              <p class="font-sans m-0 mt-2 text-[15px] font-medium text-[#273BE2]">{{ f.tagline }}</p>
-              <p class="font-sans m-0 mt-3 text-sm leading-relaxed text-[#5F5F5F]">{{ f.desc }}</p>
-              <ul class="font-sans m-0 mt-6 flex flex-col gap-2.5 p-0" style="list-style: none;">
-                <li v-for="pt in f.points" :key="pt" class="flex items-start gap-2 text-sm text-[#121212]">
-                  <Check :size="15" :stroke-width="2" class="mt-[3px] shrink-0 text-[#16A34A]" />
-                  {{ pt }}
-                </li>
-              </ul>
-              <div class="mt-auto pt-8">
-                <NuxtLink :to="f.to" class="font-sans group inline-flex items-center gap-1.5 rounded-[14px] border border-[#E3E3E3] px-5 py-2 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:border-[#121212]">
-                  {{ f.cta }}
-                  <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
-                </NuxtLink>
-              </div>
+              <SmoothCorners :corners="{ radius: 20, smoothing: 0.6 }" class="flex h-full flex-col rounded-[20px] border border-[#E3E3E3] bg-white p-8 shadow-[0_16px_50px_rgba(0,0,0,0.08)] md:p-10">
+                <div class="flex items-start justify-between">
+                  <SmoothCorners as-child :corners="{ radius: 14, smoothing: 0.6 }">
+                    <span class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#121212] text-white">
+                      <component :is="f.icon" :size="22" :stroke-width="1.7" />
+                    </span>
+                  </SmoothCorners>
+                  <span class="font-sans text-sm font-semibold text-[#8A8A8A]">{{ f.index }}</span>
+                </div>
+                <h3 class="font-sans m-0 mt-6 text-[26px] font-semibold leading-[1.1] text-[#121212]">{{ f.title }}</h3>
+                <p class="font-sans m-0 mt-2 text-[15px] font-medium text-[#273BE2]">{{ f.tagline }}</p>
+                <p class="font-sans m-0 mt-3 text-sm leading-relaxed text-[#5F5F5F]">{{ f.desc }}</p>
+                <ul class="font-sans m-0 mt-6 flex flex-col gap-2.5 p-0" style="list-style: none;">
+                  <li v-for="pt in f.points" :key="pt" class="flex items-start gap-2 text-sm text-[#121212]">
+                    <Check :size="15" :stroke-width="2" class="mt-[3px] shrink-0 text-[#16A34A]" />
+                    {{ pt }}
+                  </li>
+                </ul>
+                <div class="mt-auto pt-8">
+                  <SmoothCorners as-child :corners="{ radius: 14, smoothing: 0.6 }">
+                    <NuxtLink :to="f.to" class="font-sans group inline-flex items-center gap-1.5 rounded-[14px] border border-[#E3E3E3] bg-white px-5 py-2 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]">
+                      {{ f.cta }}
+                      <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
+                    </NuxtLink>
+                  </SmoothCorners>
+                </div>
+              </SmoothCorners>
             </article>
           </div>
         </div>
@@ -464,12 +484,16 @@ const tiers = [
           Everything an agent touches — tools, memory, rules, and proof — managed in one place.
         </p>
         <div class="mt-12 grid grid-cols-3 gap-4 max-md:grid-cols-1">
-          <div v-for="(c, i) in capabilities" :key="c.title" v-reveal="(i % 3) * 90" class="group rounded-[20px] border border-[#E3E3E3] bg-white p-8 transition-all duration-200 hover:-translate-y-1 hover:border-[#121212] hover:shadow-[0_20px_50px_rgba(0,0,0,0.10)]">
-            <span class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#F4F4F4] text-[#121212] transition-colors duration-200 group-hover:bg-[#273BE2] group-hover:text-white">
-              <component :is="c.icon" :size="22" :stroke-width="1.7" />
-            </span>
-            <h3 class="font-sans m-0 mb-2 mt-5 text-[17px] font-semibold text-[#121212]">{{ c.title }}</h3>
-            <p class="font-sans m-0 text-sm leading-relaxed text-[#5F5F5F]">{{ c.desc }}</p>
+          <div v-for="(c, i) in capabilities" :key="c.title" v-reveal="(i % 3) * 90" class="transition-transform duration-200 hover:-translate-y-1">
+            <SmoothCorners :corners="{ radius: 20, smoothing: 0.6 }" class="group h-full rounded-[20px] border border-[#E3E3E3] bg-white p-8">
+              <SmoothCorners as-child :corners="{ radius: 14, smoothing: 0.6 }">
+                <span class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#F4F4F4] text-[#121212] transition-colors duration-200 group-hover:bg-[#273BE2] group-hover:text-white">
+                  <component :is="c.icon" :size="22" :stroke-width="1.7" />
+                </span>
+              </SmoothCorners>
+              <h3 class="font-sans m-0 mb-2 mt-5 text-[17px] font-semibold text-[#121212]">{{ c.title }}</h3>
+              <p class="font-sans m-0 text-sm leading-relaxed text-[#5F5F5F]">{{ c.desc }}</p>
+            </SmoothCorners>
           </div>
         </div>
       </section>
@@ -482,22 +506,24 @@ const tiers = [
             One platform, every team.
           </h2>
           <div v-reveal="160" class="mt-8 flex flex-wrap gap-2" role="tablist" aria-label="Use cases">
-            <button
+            <SmoothCorners
               v-for="u in useCases"
               :key="u.id"
+              as="button"
+              type="button"
+              :corners="{ radius: 999, smoothing: 0.6 }"
               role="tab"
               :aria-selected="activeUseCase === u.id"
-              type="button"
               class="font-sans inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-4 py-1.5 text-[13px] font-medium transition-colors duration-100"
-              :class="activeUseCase === u.id ? 'border-[#121212] bg-[#121212] text-white' : 'border-[#E3E3E3] bg-white text-[#5F5F5F] hover:border-[#121212] hover:text-[#121212]'"
+              :class="activeUseCase === u.id ? 'border-[#121212] bg-[#121212] text-white' : 'border-[#E3E3E3] bg-white text-[#5F5F5F] hover:bg-[#F4F4F4] hover:text-[#121212]'"
               @click="activeUseCase = u.id"
             >
               <component :is="u.icon" :size="14" :stroke-width="1.8" />
               {{ u.label }}
-            </button>
+            </SmoothCorners>
           </div>
           <div :key="currentUseCase.id" class="tab-panel-enter mt-4 grid grid-cols-[1.4fr_1fr] gap-3 max-md:grid-cols-1">
-            <div class="rounded-[20px] border border-[#E3E3E3] bg-white p-8">
+            <SmoothCorners :corners="{ radius: 20, smoothing: 0.6 }" class="rounded-[20px] border border-[#E3E3E3] bg-white p-8">
               <h3 class="font-sans m-0 max-w-[440px] text-[24px] font-semibold leading-[1.15] text-[#121212] md:text-[28px]">
                 {{ currentUseCase.headline }}
               </h3>
@@ -512,14 +538,14 @@ const tiers = [
                 Build a {{ currentUseCase.label.toLowerCase() }} agent
                 <ArrowRight :size="13" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
               </NuxtLink>
-            </div>
-            <div class="flex flex-col justify-between rounded-[20px] bg-[#121212] p-8 text-white">
+            </SmoothCorners>
+            <SmoothCorners :corners="{ radius: 20, smoothing: 0.6 }" class="flex flex-col justify-between rounded-[20px] bg-[#121212] p-8 text-white">
               <component :is="currentUseCase.icon" :size="22" :stroke-width="1.5" class="text-white" />
               <div class="mt-10">
                 <p class="font-sans m-0 text-[44px] font-semibold leading-none">{{ currentUseCase.stat.value }}</p>
                 <p class="font-sans m-0 mt-2 text-[13px] leading-relaxed text-[#A3A3A3]">{{ currentUseCase.stat.label }}</p>
               </div>
-            </div>
+            </SmoothCorners>
           </div>
         </div>
       </section>
@@ -536,28 +562,36 @@ const tiers = [
               Pre-built agents from the community. One-click deploy, then make them yours.
             </p>
           </div>
-          <NuxtLink
-            to="/use/marketplace"
-            class="font-sans group inline-flex shrink-0 items-center gap-1.5 rounded-[14px] border border-[#E3E3E3] bg-white px-5 py-2 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
-          >
-            <Store :size="15" :stroke-width="1.8" />
-            All templates
-            <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
-          </NuxtLink>
+          <SmoothCorners as-child :corners="{ radius: 14, smoothing: 0.6 }">
+            <NuxtLink
+              to="/use/marketplace"
+              class="font-sans group inline-flex shrink-0 items-center gap-1.5 rounded-[14px] border border-[#E3E3E3] bg-white px-5 py-2 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
+            >
+              <Store :size="15" :stroke-width="1.8" />
+              All templates
+              <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
+            </NuxtLink>
+          </SmoothCorners>
         </div>
         <div class="mt-10 grid grid-cols-3 gap-3 max-md:grid-cols-1">
-          <NuxtLink
+          <div
             v-for="(t, i) in templates"
             :key="t.name"
             v-reveal="i * 100"
-            to="/use/marketplace"
-            class="group rounded-[12px] border border-[#E3E3E3] bg-white p-6 no-underline transition-colors duration-100 hover:border-[#121212]"
+            class="h-full transition-transform duration-200 hover:-translate-y-1"
           >
-            <component :is="t.icon" :size="20" :stroke-width="1.6" class="text-[#273BE2]" />
-            <h3 class="font-sans m-0 mb-1.5 mt-4 text-[16px] font-semibold text-[#121212]">{{ t.name }}</h3>
-            <p class="font-sans m-0 text-sm leading-relaxed text-[#5F5F5F]">{{ t.desc }}</p>
-            <p class="font-sans m-0 mt-4 text-xs text-[#8A8A8A]">{{ t.meta }}</p>
-          </NuxtLink>
+            <SmoothCorners as-child :corners="{ radius: 20, smoothing: 0.6 }">
+              <NuxtLink
+                to="/use/marketplace"
+                class="group flex h-full flex-col rounded-[20px] border border-[#E3E3E3] bg-white p-6 no-underline transition-colors duration-100 hover:bg-[#FAFAFA]"
+              >
+                <component :is="t.icon" :size="20" :stroke-width="1.6" class="text-[#273BE2]" />
+                <h3 class="font-sans m-0 mb-1.5 mt-4 text-[16px] font-semibold text-[#121212]">{{ t.name }}</h3>
+                <p class="font-sans m-0 text-sm leading-relaxed text-[#5F5F5F]">{{ t.desc }}</p>
+                <p class="font-sans m-0 mt-4 text-xs text-[#8A8A8A]">{{ t.meta }}</p>
+              </NuxtLink>
+            </SmoothCorners>
+          </div>
         </div>
       </section>
 
@@ -571,10 +605,12 @@ const tiers = [
                 Every agent ships with observability.
               </h2>
             </div>
-            <NuxtLink to="/use/analytics" class="font-sans group inline-flex shrink-0 items-center gap-1.5 rounded-[14px] border border-white/20 px-5 py-2 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-white/10">
-              Open analytics
-              <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
-            </NuxtLink>
+            <SmoothCorners as-child :corners="{ radius: 14, smoothing: 0.6 }">
+              <NuxtLink to="/use/analytics" class="font-sans group inline-flex shrink-0 items-center gap-1.5 rounded-[14px] border border-white/20 px-5 py-2 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-white/10">
+                Open analytics
+                <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
+              </NuxtLink>
+            </SmoothCorners>
           </div>
           <div ref="metricsRef" class="mt-14 grid grid-cols-4 gap-8 max-md:grid-cols-2">
             <div v-for="(m, i) in metricDefs" :key="m.label" v-reveal="i * 90">
@@ -595,36 +631,49 @@ const tiers = [
           Consume Accord as a service, or deploy inside your own boundary. Either way: SSO, scoped permissions, and a full audit trail.
         </p>
         <div class="mt-12 grid grid-cols-3 gap-4 max-md:grid-cols-1">
-          <div v-for="(d, i) in deployOptions" :key="d.title" v-reveal="i * 100" class="group rounded-[20px] border border-[#E3E3E3] bg-white p-8 transition-all duration-200 hover:-translate-y-1 hover:border-[#121212] hover:shadow-[0_20px_50px_rgba(0,0,0,0.10)]">
-            <span class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#F4F4F4] text-[#121212] transition-colors duration-200 group-hover:bg-[#121212] group-hover:text-white">
-              <component :is="d.icon" :size="22" :stroke-width="1.7" />
-            </span>
-            <h3 class="font-sans m-0 mb-2 mt-5 text-[17px] font-semibold text-[#121212]">{{ d.title }}</h3>
-            <p class="font-sans m-0 text-sm leading-relaxed text-[#5F5F5F]">{{ d.desc }}</p>
+          <div v-for="(d, i) in deployOptions" :key="d.title" v-reveal="i * 100" class="transition-transform duration-200 hover:-translate-y-1">
+            <SmoothCorners :corners="{ radius: 20, smoothing: 0.6 }" class="group h-full rounded-[20px] border border-[#E3E3E3] bg-white p-8">
+              <SmoothCorners as-child :corners="{ radius: 14, smoothing: 0.6 }">
+                <span class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#F4F4F4] text-[#121212] transition-colors duration-200 group-hover:bg-[#121212] group-hover:text-white">
+                  <component :is="d.icon" :size="22" :stroke-width="1.7" />
+                </span>
+              </SmoothCorners>
+              <h3 class="font-sans m-0 mb-2 mt-5 text-[17px] font-semibold text-[#121212]">{{ d.title }}</h3>
+              <p class="font-sans m-0 text-sm leading-relaxed text-[#5F5F5F]">{{ d.desc }}</p>
+            </SmoothCorners>
           </div>
         </div>
-        <div v-reveal class="mt-4 flex flex-col justify-between gap-6 rounded-[20px] bg-[#121212] p-8 text-white md:flex-row md:items-center md:p-10">
-          <div class="flex items-start gap-4">
-            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-white/10 text-white">
-              <GitFork :size="22" :stroke-width="1.7" />
-            </span>
-            <div>
-              <h3 class="font-sans m-0 text-[19px] font-semibold text-white">Open source at the core</h3>
-              <p class="font-sans m-0 mt-2 max-w-[520px] text-sm leading-relaxed text-[#A3A3A3]">
-                The agent runtime, eval harness, and templates are open. Inspect the code, self-host it, fork it — no black boxes running your business.
-              </p>
+        <div v-reveal class="mt-4">
+          <SmoothCorners :corners="{ radius: 20, smoothing: 0.6 }" class="flex flex-col justify-between gap-6 rounded-[20px] bg-[#121212] p-8 text-white md:flex-row md:items-center md:p-10">
+            <div class="flex items-start gap-4">
+              <SmoothCorners as-child :corners="{ radius: 14, smoothing: 0.6 }">
+                <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-white/10 text-white">
+                  <GitFork :size="22" :stroke-width="1.7" />
+                </span>
+              </SmoothCorners>
+              <div>
+                <h3 class="font-sans m-0 text-[19px] font-semibold text-white">Open source at the core</h3>
+                <p class="font-sans m-0 mt-2 max-w-[520px] text-sm leading-relaxed text-[#A3A3A3]">
+                  The agent runtime, eval harness, and templates are open. Inspect the code, self-host it, fork it — no black boxes running your business.
+                </p>
+              </div>
             </div>
-          </div>
-          <span class="font-sans inline-flex shrink-0 items-center gap-2 self-start rounded-[12px] bg-white/10 px-4 py-2 text-[13px] font-medium text-white md:self-center">
-            <Check :size="14" :stroke-width="2" class="text-[#4ADE80]" />
-            MIT-licensed core
-          </span>
+            <span class="font-sans inline-flex shrink-0 items-center gap-2 self-start rounded-[12px] bg-white/10 px-4 py-1.5 text-[13px] font-medium text-white md:self-center">
+              <Check :size="14" :stroke-width="2" class="text-[#4ADE80]" />
+              MIT-licensed core
+            </span>
+          </SmoothCorners>
         </div>
         <div class="mt-4 flex flex-wrap gap-2">
-          <span v-for="b in ['SSO & SCIM', 'Scoped tool permissions', 'Full audit logs', 'Eval-gated deploys']" :key="b" class="font-sans inline-flex items-center gap-1.5 rounded-full border border-[#E3E3E3] bg-[#FAFAFA] px-3.5 py-1.5 text-[13px] text-[#5F5F5F]">
+          <SmoothCorners
+            v-for="b in ['SSO & SCIM', 'Scoped tool permissions', 'Full audit logs', 'Eval-gated deploys']"
+            :key="b"
+            :corners="{ radius: 999, smoothing: 0.6 }"
+            class="font-sans inline-flex items-center gap-1.5 rounded-full border border-[#E3E3E3] bg-[#FAFAFA] px-3.5 py-1.5 text-[13px] text-[#5F5F5F]"
+          >
             <FileText :size="13" :stroke-width="1.8" class="text-[#8A8A8A]" />
             {{ b }}
-          </span>
+          </SmoothCorners>
         </div>
       </section>
 
@@ -640,9 +689,9 @@ const tiers = [
               v-for="(t, i) in tiers"
               :key="t.name"
               v-reveal="i * 100"
-              class="flex flex-col rounded-[20px] border bg-white p-6"
-              :class="t.featured ? 'border-[#121212] shadow-[0_12px_40px_rgba(0,0,0,0.08)]' : 'border-[#E3E3E3]'"
+              class="h-full"
             >
+              <SmoothCorners :corners="{ radius: 20, smoothing: 0.6 }" class="flex h-full flex-col rounded-[20px] border bg-white p-6" :class="t.featured ? 'border-[#121212] shadow-[0_12px_40px_rgba(0,0,0,0.08)]' : 'border-[#E3E3E3]'">
               <h3 class="font-sans m-0 text-sm font-semibold text-[#121212]">{{ t.name }}</h3>
               <p class="m-0 mt-3">
                 <span class="font-sans text-[30px] font-medium text-[#121212]">{{ t.price }}</span>
@@ -655,21 +704,26 @@ const tiers = [
                   {{ f }}
                 </li>
               </ul>
-              <NuxtLink
-                v-if="t.to.startsWith('/')"
-                :to="t.to"
-                class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] px-4 py-1.5 text-[13px] font-medium no-underline transition-colors duration-100"
-                :class="t.featured ? 'bg-[#121212] text-white hover:bg-[#273BE2]' : 'border border-[#E3E3E3] text-[#121212] hover:bg-[#F4F4F4]'"
-              >
-                {{ t.cta }}
-              </NuxtLink>
-              <a
-                v-else
-                :href="t.to"
-                class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] border border-[#E3E3E3] px-4 py-1.5 text-[13px] font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
-              >
-                {{ t.cta }}
-              </a>
+              <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+                <NuxtLink
+                  v-if="t.to.startsWith('/')"
+                  :to="t.to"
+                  class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] px-4 py-1.5 text-[13px] font-medium no-underline transition-colors duration-100"
+                  :class="t.featured ? 'bg-[#121212] text-white hover:bg-[#273BE2]' : 'border border-[#E3E3E3] text-[#121212] hover:bg-[#F4F4F4]'"
+                >
+                  {{ t.cta }}
+                </NuxtLink>
+              </SmoothCorners>
+              <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+                <a
+                  v-else
+                  :href="t.to"
+                  class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] border border-[#E3E3E3] px-4 py-1.5 text-[13px] font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
+                >
+                  {{ t.cta }}
+                </a>
+              </SmoothCorners>
+              </SmoothCorners>
             </div>
           </div>
         </div>
@@ -684,19 +738,23 @@ const tiers = [
           Describe the work in plain text. Accord builds the workflow, tools, and memory — and runs it tonight.
         </p>
         <div v-reveal="180" class="mt-8 flex items-center justify-center gap-3 max-sm:flex-col max-sm:items-stretch">
-          <NuxtLink
-            to="/use/agent"
-            class="font-sans group inline-flex items-center justify-center gap-1.5 rounded-[16px] bg-[#121212] px-6 py-2.5 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]"
-          >
-            Start building free
-            <ArrowRight :size="15" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
-          </NuxtLink>
-          <NuxtLink
-            to="/use/marketplace"
-            class="font-sans inline-flex items-center justify-center rounded-[16px] border border-[#E3E3E3] bg-white px-6 py-2.5 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
-          >
-            Browse templates
-          </NuxtLink>
+          <SmoothCorners as-child :corners="{ radius: 16, smoothing: 0.6 }">
+            <NuxtLink
+              to="/use/agent"
+              class="font-sans group inline-flex items-center justify-center gap-1.5 rounded-[16px] bg-[#121212] px-6 py-2.5 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]"
+            >
+              Start building free
+              <ArrowRight :size="15" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
+            </NuxtLink>
+          </SmoothCorners>
+          <SmoothCorners as-child :corners="{ radius: 16, smoothing: 0.6 }">
+            <NuxtLink
+              to="/use/marketplace"
+              class="font-sans inline-flex items-center justify-center rounded-[16px] border border-[#E3E3E3] bg-white px-6 py-2.5 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
+            >
+              Browse templates
+            </NuxtLink>
+          </SmoothCorners>
         </div>
       </section>
     </main>

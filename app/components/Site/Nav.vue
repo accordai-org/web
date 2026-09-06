@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Menu, X, ArrowRight } from "@lucide/vue";
+import { SmoothCorners } from "@lisse/vue";
 
 const open = ref(false);
 
@@ -17,9 +18,11 @@ const links = [
     <div class="mx-auto flex h-14 w-full max-w-[1120px] items-center justify-between px-6">
       <!-- Wordmark -->
       <NuxtLink to="/" class="flex items-center gap-2 no-underline" aria-label="Accord home">
-        <span class="flex h-6 w-6 items-center justify-center rounded-[7px] bg-[#273BE2]">
-          <span class="font-sans text-[13px] font-semibold leading-none text-white">A</span>
-        </span>
+        <SmoothCorners as-child :corners="{ radius: 7, smoothing: 0.6 }">
+          <span class="flex h-6 w-6 items-center justify-center rounded-[7px] bg-[#273BE2]">
+            <span class="font-sans text-[13px] font-semibold leading-none text-white">A</span>
+          </span>
+        </SmoothCorners>
         <span class="font-sans text-[15px] font-semibold tracking-[-0.01em] text-[#121212]">Accord</span>
       </NuxtLink>
 
@@ -37,19 +40,23 @@ const links = [
 
       <!-- Desktop actions -->
       <div class="flex items-center gap-2 max-md:hidden">
-        <a
-          href="#pricing"
-          class="font-sans rounded-[12px] px-3 py-[7px] text-[13px] font-medium text-[#5F5F5F] no-underline transition-colors duration-100 hover:bg-[#F4F4F4] hover:text-[#121212]"
-        >
-          Contact sales
-        </a>
-        <NuxtLink
-          to="/use/agent"
-          class="font-sans group flex items-center gap-1.5 rounded-[12px] bg-[#121212] px-4 py-[7px] text-[13px] font-medium text-white no-underline transition-colors duration-100 hover:bg-[#3F3F3F]"
-        >
-          Start building
-          <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
-        </NuxtLink>
+        <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+          <a
+            href="#pricing"
+            class="font-sans rounded-[12px] px-3 py-[7px] text-[13px] font-medium text-[#5F5F5F] no-underline transition-colors duration-100 hover:bg-[#F4F4F4] hover:text-[#121212]"
+          >
+            Contact sales
+          </a>
+        </SmoothCorners>
+        <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+          <NuxtLink
+            to="/use/agent"
+            class="font-sans group flex items-center gap-1.5 rounded-[12px] bg-[#121212] px-4 py-[7px] text-[13px] font-medium text-white no-underline transition-colors duration-100 hover:bg-[#3F3F3F]"
+          >
+            Start building
+            <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
+          </NuxtLink>
+        </SmoothCorners>
       </div>
 
       <!-- Mobile toggle -->
@@ -76,13 +83,15 @@ const links = [
         >
           {{ l.label }}
         </a>
-        <NuxtLink
-          to="/use/agent"
-          class="font-sans mt-2 flex items-center justify-center gap-1.5 rounded-[12px] bg-[#121212] px-3.5 py-2 text-sm font-medium text-white no-underline"
-        >
-          Start building
-          <ArrowRight :size="14" :stroke-width="2" />
-        </NuxtLink>
+        <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+          <NuxtLink
+            to="/use/agent"
+            class="font-sans mt-2 flex items-center justify-center gap-1.5 rounded-[12px] bg-[#121212] px-3.5 py-2 text-sm font-medium text-white no-underline"
+          >
+            Start building
+            <ArrowRight :size="14" :stroke-width="2" />
+          </NuxtLink>
+        </SmoothCorners>
       </nav>
     </div>
   </header>

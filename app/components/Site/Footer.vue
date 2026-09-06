@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { SmoothCorners } from "@lisse/vue";
+
 const columns = [
   {
     title: "Product",
@@ -45,9 +47,11 @@ const columns = [
       <div class="grid grid-cols-[1.2fr_repeat(4,1fr)] gap-8 max-md:grid-cols-2">
         <div>
           <div class="flex items-center gap-2">
-            <span class="flex h-6 w-6 items-center justify-center rounded-[7px] bg-[#273BE2]">
-              <span class="font-sans text-[13px] font-semibold leading-none text-white">A</span>
-            </span>
+            <SmoothCorners as-child :corners="{ radius: 7, smoothing: 0.6 }">
+              <span class="flex h-6 w-6 items-center justify-center rounded-[7px] bg-[#273BE2]">
+                <span class="font-sans text-[13px] font-semibold leading-none text-white">A</span>
+              </span>
+            </SmoothCorners>
             <span class="font-sans text-[15px] font-semibold text-[#121212]">Accord</span>
           </div>
           <p class="font-sans mt-3 max-w-[220px] text-[13px] leading-relaxed text-[#6B6B6B]">
