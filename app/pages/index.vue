@@ -309,14 +309,14 @@ const tiers = [
         <div class="hero-enter mt-8 flex items-center justify-center gap-3 max-sm:flex-col max-sm:items-stretch" style="animation-delay: 180ms;">
           <NuxtLink
             to="/use/agent"
-            class="font-sans group inline-flex items-center justify-center gap-1.5 rounded-[16px] bg-[#121212] px-6 py-3 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#3F3F3F]"
+            class="font-sans group inline-flex items-center justify-center gap-1.5 rounded-[16px] bg-[#121212] px-6 py-2.5 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#3F3F3F]"
           >
             Start building
             <ArrowRight :size="15" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
           </NuxtLink>
           <a
             href="#platform"
-            class="font-sans inline-flex items-center justify-center rounded-[16px] border border-[#E3E3E3] bg-white px-6 py-3 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
+            class="font-sans inline-flex items-center justify-center rounded-[16px] border border-[#E3E3E3] bg-white px-6 py-2.5 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
           >
             See the platform
           </a>
@@ -349,14 +349,14 @@ const tiers = [
                   <span
                     v-for="chip in demoChips"
                     :key="chip"
-                    class="font-sans rounded-[10px] border border-[#E3E3E3] px-2.5 py-[5px] text-xs text-[#5F5F5F]"
+                    class="font-sans rounded-full border border-[#E3E3E3] px-3 py-[5px] text-xs text-[#5F5F5F]"
                   >
                     + {{ chip }}
                   </span>
                 </div>
                 <NuxtLink
                   to="/use/agent"
-                  class="font-sans inline-flex shrink-0 items-center justify-center gap-1 rounded-[12px] bg-[#121212] px-4 py-2 text-xs font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]"
+                  class="font-sans inline-flex shrink-0 items-center justify-center gap-1 rounded-[12px] bg-[#121212] px-4 py-1.5 text-xs font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]"
                 >
                   Build agent <span aria-hidden="true">→</span>
                 </NuxtLink>
@@ -398,7 +398,7 @@ const tiers = [
               <p class="font-sans m-0 mt-3 max-w-[400px] text-[15px] leading-relaxed text-[#5F5F5F]">
                 {{ features[activeFeature].desc }}
               </p>
-              <NuxtLink :to="features[activeFeature].to" class="font-sans group mt-6 inline-flex items-center gap-1.5 rounded-[14px] bg-[#121212] px-5 py-2.5 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]">
+              <NuxtLink :to="features[activeFeature].to" class="font-sans group mt-6 inline-flex items-center gap-1.5 rounded-[14px] bg-[#121212] px-5 py-2 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]">
                 {{ features[activeFeature].cta }}
                 <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
               </NuxtLink>
@@ -444,7 +444,7 @@ const tiers = [
                 </li>
               </ul>
               <div class="mt-auto pt-8">
-                <NuxtLink :to="f.to" class="font-sans group inline-flex items-center gap-1.5 rounded-[14px] border border-[#E3E3E3] px-5 py-2.5 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:border-[#121212]">
+                <NuxtLink :to="f.to" class="font-sans group inline-flex items-center gap-1.5 rounded-[14px] border border-[#E3E3E3] px-5 py-2 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:border-[#121212]">
                   {{ f.cta }}
                   <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
                 </NuxtLink>
@@ -488,7 +488,7 @@ const tiers = [
               role="tab"
               :aria-selected="activeUseCase === u.id"
               type="button"
-              class="font-sans inline-flex cursor-pointer items-center gap-1.5 rounded-[12px] border px-4 py-2 text-[13px] font-medium transition-colors duration-100"
+              class="font-sans inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-4 py-1.5 text-[13px] font-medium transition-colors duration-100"
               :class="activeUseCase === u.id ? 'border-[#121212] bg-[#121212] text-white' : 'border-[#E3E3E3] bg-white text-[#5F5F5F] hover:border-[#121212] hover:text-[#121212]'"
               @click="activeUseCase = u.id"
             >
@@ -538,7 +538,7 @@ const tiers = [
           </div>
           <NuxtLink
             to="/use/marketplace"
-            class="font-sans group inline-flex shrink-0 items-center gap-1.5 rounded-[14px] border border-[#E3E3E3] bg-white px-5 py-2.5 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
+            class="font-sans group inline-flex shrink-0 items-center gap-1.5 rounded-[14px] border border-[#E3E3E3] bg-white px-5 py-2 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
           >
             <Store :size="15" :stroke-width="1.8" />
             All templates
@@ -571,7 +571,7 @@ const tiers = [
                 Every agent ships with observability.
               </h2>
             </div>
-            <NuxtLink to="/use/analytics" class="font-sans group inline-flex shrink-0 items-center gap-1.5 rounded-[14px] border border-white/20 px-5 py-2.5 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-white/10">
+            <NuxtLink to="/use/analytics" class="font-sans group inline-flex shrink-0 items-center gap-1.5 rounded-[14px] border border-white/20 px-5 py-2 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-white/10">
               Open analytics
               <ArrowRight :size="14" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
             </NuxtLink>
@@ -621,7 +621,7 @@ const tiers = [
           </span>
         </div>
         <div class="mt-4 flex flex-wrap gap-2">
-          <span v-for="b in ['SSO & SCIM', 'Scoped tool permissions', 'Full audit logs', 'Eval-gated deploys']" :key="b" class="font-sans inline-flex items-center gap-1.5 rounded-[12px] border border-[#E3E3E3] bg-[#FAFAFA] px-3.5 py-2 text-[13px] text-[#5F5F5F]">
+          <span v-for="b in ['SSO & SCIM', 'Scoped tool permissions', 'Full audit logs', 'Eval-gated deploys']" :key="b" class="font-sans inline-flex items-center gap-1.5 rounded-full border border-[#E3E3E3] bg-[#FAFAFA] px-3.5 py-1.5 text-[13px] text-[#5F5F5F]">
             <FileText :size="13" :stroke-width="1.8" class="text-[#8A8A8A]" />
             {{ b }}
           </span>
@@ -658,7 +658,7 @@ const tiers = [
               <NuxtLink
                 v-if="t.to.startsWith('/')"
                 :to="t.to"
-                class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] px-4 py-2 text-[13px] font-medium no-underline transition-colors duration-100"
+                class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] px-4 py-1.5 text-[13px] font-medium no-underline transition-colors duration-100"
                 :class="t.featured ? 'bg-[#121212] text-white hover:bg-[#273BE2]' : 'border border-[#E3E3E3] text-[#121212] hover:bg-[#F4F4F4]'"
               >
                 {{ t.cta }}
@@ -666,7 +666,7 @@ const tiers = [
               <a
                 v-else
                 :href="t.to"
-                class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] border border-[#E3E3E3] px-4 py-2 text-[13px] font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
+                class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] border border-[#E3E3E3] px-4 py-1.5 text-[13px] font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
               >
                 {{ t.cta }}
               </a>
@@ -686,14 +686,14 @@ const tiers = [
         <div v-reveal="180" class="mt-8 flex items-center justify-center gap-3 max-sm:flex-col max-sm:items-stretch">
           <NuxtLink
             to="/use/agent"
-            class="font-sans group inline-flex items-center justify-center gap-1.5 rounded-[16px] bg-[#121212] px-6 py-3 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]"
+            class="font-sans group inline-flex items-center justify-center gap-1.5 rounded-[16px] bg-[#121212] px-6 py-2.5 text-sm font-medium text-white no-underline transition-colors duration-100 hover:bg-[#273BE2]"
           >
             Start building free
             <ArrowRight :size="15" :stroke-width="2" class="transition-transform duration-150 group-hover:translate-x-[2px]" />
           </NuxtLink>
           <NuxtLink
             to="/use/marketplace"
-            class="font-sans inline-flex items-center justify-center rounded-[16px] border border-[#E3E3E3] bg-white px-6 py-3 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
+            class="font-sans inline-flex items-center justify-center rounded-[16px] border border-[#E3E3E3] bg-white px-6 py-2.5 text-sm font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
           >
             Browse templates
           </NuxtLink>
