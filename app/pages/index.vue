@@ -704,9 +704,8 @@ const tiers = [
                   {{ f }}
                 </li>
               </ul>
-              <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+              <SmoothCorners v-if="t.to.startsWith('/')" as-child :corners="{ radius: 12, smoothing: 0.6 }">
                 <NuxtLink
-                  v-if="t.to.startsWith('/')"
                   :to="t.to"
                   class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] px-4 py-1.5 text-[13px] font-medium no-underline transition-colors duration-100"
                   :class="t.featured ? 'bg-[#121212] text-white hover:bg-[#273BE2]' : 'border border-[#E3E3E3] text-[#121212] hover:bg-[#F4F4F4]'"
@@ -714,9 +713,8 @@ const tiers = [
                   {{ t.cta }}
                 </NuxtLink>
               </SmoothCorners>
-              <SmoothCorners as-child :corners="{ radius: 12, smoothing: 0.6 }">
+              <SmoothCorners v-else as-child :corners="{ radius: 12, smoothing: 0.6 }">
                 <a
-                  v-else
                   :href="t.to"
                   class="font-sans mt-6 inline-flex items-center justify-center rounded-[12px] border border-[#E3E3E3] px-4 py-1.5 text-[13px] font-medium text-[#121212] no-underline transition-colors duration-100 hover:bg-[#F4F4F4]"
                 >
