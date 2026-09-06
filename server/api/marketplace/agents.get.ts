@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
 
   let upstream: Response
   try {
-    const url = new URL(`${backendBase}/v1/marketplace/agents`)
+    const url = new URL(`${backendBase}/api/v1/marketplace/agents`)
     if (q) url.searchParams.set("q", q)
     if (type) url.searchParams.set("type", type)
     upstream = await fetch(url.toString(), {

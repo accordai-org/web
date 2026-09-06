@@ -79,7 +79,7 @@ export default defineEventHandler(async (event) => {
 
   let upstream: Response
   try {
-    upstream = await fetch(`${backendBase}/v1/agent/chat`, {
+    upstream = await fetch(`${backendBase}/api/v1/agent/chat`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
 
   let upstream: Response
   try {
-    upstream = await fetch(`${backendBase}/v1/agents/${encodeURIComponent(id)}`, {
+    upstream = await fetch(`${backendBase}/api/v1/agents/${encodeURIComponent(id)}`, {
       method: "GET",
       headers: { accept: "application/json" },
     })

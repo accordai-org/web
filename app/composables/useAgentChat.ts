@@ -171,7 +171,7 @@ export function useAgentChat() {
           toolsUsed.value = data.tools.filter((t): t is string => typeof t === "string")
         }
         const text = typeof data.message === "string" ? data.message : ""
-        if (!text) throw fail("Pointer returned an empty response. Please try again.")
+        if (!text) throw fail("Accord returned an empty response. Please try again.")
         appendDelta(text)
         return
       }
@@ -196,7 +196,7 @@ export function useAgentChat() {
           const messageText =
             data && typeof data.message === "string" && data.message
               ? data.message
-              : "Pointer could not respond right now. Please try again."
+              : "Accord could not respond right now. Please try again."
           throw fail(messageText)
         }
         // `done` needs no action — completion is detected by stream end.
@@ -221,16 +221,16 @@ export function useAgentChat() {
         }
       }
 
-      if (assistantId === null) throw fail("Pointer returned an empty response. Please try again.")
+      if (assistantId === null) throw fail("Accord returned an empty response. Please try again.")
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") throw error
       if (error instanceof Error && requestError.value) throw error
       const messageText =
         error instanceof TypeError
-          ? "Pointer could not respond right now. Please try again."
+          ? "Accord could not respond right now. Please try again."
           : error instanceof Error && error.message
             ? error.message
-            : "Pointer could not respond right now. Please try again."
+            : "Accord could not respond right now. Please try again."
       throw fail(messageText)
     } finally {
       try {
