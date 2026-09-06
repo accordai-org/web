@@ -1,30 +1,47 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'use' })
 
+import { useAgentDetail } from '~/composables/useAgentDetail'
+
 const route = useRoute()
-const id = computed(() => route.params.id as string)
+const agentId = computed(() => route.params.id as string)
 
-const agent = computed(() => {
-  const map: Record<string, { name: string; desc: string; status: string; runs: string }> = {
-    'inbox-triage': { name: 'Inbox triage', desc: 'Drafts replies to partnership requests from your inbox.', status: 'Active', runs: '1,204' },
-    'pr-reviewer': { name: 'PR reviewer', desc: 'Reviews every PR against your style guide.', status: 'Active', runs: '862' },
-    'competitor-watch': { name: 'Competitor watch', desc: 'Tracks competitor launches and summarises changes.', status: 'Paused', runs: '319' },
-  }
-  return map[id.value] ?? { name: id.value, desc: 'Owned/deployed agent asset.', status: 'Active', runs: '0' }
-})
-
-const stats = [
-  { label: 'Runs', value: agent.value.runs },
-  { label: 'Success rate', value: '97.2%' },
-  { label: 'Token usage', value: '1.2M' },
-  { label: 'Cost', value: '$18.40' },
-  { label: 'Earnings', value: '$0.00' },
-]
+// Live detail: page -> useAgentDetail -> /api/agents/:id -> FastAPI.
+const { agent, pending, error, isNotFound, stats, refresh } = useAgentDetail(agentId)
 </script>
 
 <template>
   <div class="font-sans unmodified-font-sans p-6">
     <NuxtLink to="/use/my-agents" class="unmodified-font-sans text-xs text-[#6B6B6B] no-underline hover:text-[#121212]">← My agents</NuxtLink>
+    <!-- Loading -->
+    <div v-if="pending" class="mt-2.5 flex flex-col gap-2.5" aria-label="Loading agent">
+      <div class="h-7 w-1/3 rounded bg-[#EDEDED]" />
+      <div class="h-4 w-2/3 rounded bg-[#F1F1F1]" />
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-2.5">
+        <div v-for="n in 5" :key="n" class="h-[74px] rounded-[10px] border border-[#E3E3E3] bg-white" />
+      </div>
+    </div>
+
+    <!-- Not found -->
+    <div v-else-if="isNotFound" class="mt-2.5 rounded-[10px] border border-[#E3E3E3] bg-white px-4 py-12 text-center">
+      <p class="unmodified-font-sans m-0 text-sm font-medium text-[#121212]">Agent not found</p>
+      <p class="unmodified-font-sans m-0 mt-1 text-[13px] text-[#6B6B6B]">It may have been deleted, or the link is wrong.</p>
+    </div>
+
+    <!-- Error -->
+    <div v-else-if="error" class="mt-2.5 rounded-[10px] border border-[#E3E3E3] bg-white px-4 py-12 text-center">
+      <p class="unmodified-font-sans m-0 text-sm font-medium text-[#121212]">Something went wrong</p>
+      <p class="unmodified-font-sans m-0 mt-1 text-[13px] text-[#6B6B6B]">{{ error }}</p>
+      <button
+        type="button"
+        class="unmodified-font-sans mt-3 cursor-pointer rounded-[9px] border-0 bg-[#121212] px-3 py-[7px] text-[13px] font-medium text-white"
+        @click="refresh()"
+      >
+        Try again
+      </button>
+    </div>
+
+    <template v-else-if="agent">
     <div class="mb-[18px] mt-2.5 flex items-start justify-between gap-3">
       <div>
         <h1 class="unmodified-font-sans m-0 mb-1 text-xl font-medium tracking-[-0.01em] text-[#121212]">{{ agent.name }}</h1>
@@ -55,17 +72,17 @@ const stats = [
       </section>
       <section class="rounded-[10px] border border-[#E3E3E3] bg-white p-3.5">
         <h2 class="unmodified-font-sans m-0 mb-2.5 text-[13px] font-medium text-[#121212]">Learned memories / patterns</h2>
-        <ul class="unmodified-font-sans m-0 flex flex-col gap-1.5 pl-4 text-xs text-[#5F5F5F]">
-          <li>Prefers concise replies for partnership emails</li>
-          <li>Escalates pricing questions to a human</li>
+        <ul v-if="agent.memories.length > 0" class="unmodified-font-sans m-0 flex flex-col gap-1.5 pl-4 text-xs text-[#5F5F5F]">
+          <li v-for="memory in agent.memories" :key="memory">{{ memory }}</li>
         </ul>
+        <p v-else class="unmodified-font-sans m-0 text-xs text-[#8A8A8A]">No learned memories yet.</p>
       </section>
       <section class="rounded-[10px] border border-[#E3E3E3] bg-white p-3.5">
         <h2 class="unmodified-font-sans m-0 mb-2.5 text-[13px] font-medium text-[#121212]">Tool usage &amp; performance</h2>
-        <ul class="unmodified-font-sans m-0 flex flex-col gap-1.5 pl-4 text-xs text-[#5F5F5F]">
-          <li>Gmail — 812 calls · 99% success</li>
-          <li>Knowledge base — 640 calls · 96% success</li>
+        <ul v-if="agent.toolUsage.length > 0" class="unmodified-font-sans m-0 flex flex-col gap-1.5 pl-4 text-xs text-[#5F5F5F]">
+          <li v-for="tool in agent.toolUsage" :key="tool.name">{{ tool.name }} — {{ tool.calls }} calls · {{ tool.successRate }} success</li>
         </ul>
+        <p v-else class="unmodified-font-sans m-0 text-xs text-[#8A8A8A]">No tool usage yet.</p>
       </section>
       <section class="rounded-[10px] border border-[#E3E3E3] bg-white p-3.5">
         <h2 class="unmodified-font-sans m-0 mb-2.5 text-[13px] font-medium text-[#121212]">Run history</h2>
@@ -79,5 +96,6 @@ const stats = [
         </ul>
       </section>
     </div>
+    </template>
   </div>
 </template>

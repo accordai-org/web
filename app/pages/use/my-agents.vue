@@ -1,88 +1,26 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'use' })
 
-import { computed, ref } from 'vue'
 import { ChevronRight, Globe, Lock, Plus, Search } from '@lucide/vue'
+import { useMyAgents } from '~/composables/useMyAgents'
 
-type Agent = {
-  id: string
-  name: string
-  desc: string
-  visibility: 'Public' | 'Private'
-  status: 'Active' | 'Paused'
-  accuracy: number
-  runs: number
-  lastRun: string
-  color: string
-  initial: string
-}
-
-const agents: Agent[] = [
-  {
-    id: 'inbox-triage',
-    name: 'Inbox triage',
-    desc: 'Drafts replies to partnership requests from your inbox.',
-    visibility: 'Private',
-    status: 'Active',
-    accuracy: 98.1,
-    runs: 1204,
-    lastRun: '12 min ago',
-    color: '#273BE2',
-    initial: 'I',
-  },
-  {
-    id: 'pr-reviewer',
-    name: 'PR reviewer',
-    desc: 'Reviews every PR against your style guide and flags risks.',
-    visibility: 'Public',
-    status: 'Active',
-    accuracy: 96.4,
-    runs: 862,
-    lastRun: '1 hr ago',
-    color: '#0E7C5B',
-    initial: 'P',
-  },
-  {
-    id: 'competitor-watch',
-    name: 'Competitor watch',
-    desc: 'Tracks competitor launches and summarises what changed.',
-    visibility: 'Private',
-    status: 'Paused',
-    accuracy: 93.8,
-    runs: 319,
-    lastRun: '6 days ago',
-    color: '#8A5A00',
-    initial: 'C',
-  },
-]
-
-const query = ref('')
-const statusFilters = ['All', 'Active', 'Paused'] as const
-const statusFilter = ref<(typeof statusFilters)[number]>('All')
-
-const filtered = computed(() => {
-  const q = query.value.trim().toLowerCase()
-  return agents.filter((a) => {
-    const matchesStatus = statusFilter.value === 'All' || a.status === statusFilter.value
-    const matchesQuery
-      = q === ''
-        || a.name.toLowerCase().includes(q)
-        || a.desc.toLowerCase().includes(q)
-    return matchesStatus && matchesQuery
-  })
-})
-
-const activeCount = computed(() => agents.filter((a) => a.status === 'Active').length)
-const totalRuns = computed(() => agents.reduce((sum, a) => sum + a.runs, 0))
-const avgAccuracy = computed(() => {
-  if (agents.length === 0) return 0
-  return agents.reduce((sum, a) => sum + a.accuracy, 0) / agents.length
-})
-
-const formatRuns = (n: number) => n.toLocaleString('en-US')
-
-const accuracyTone = (value: number) =>
-  value >= 96 ? 'bg-[#16A34A]' : value >= 93 ? 'bg-[#273BE2]' : 'bg-[#D97706]'
+// Live list: page -> useMyAgents -> /api/agents/mine -> FastAPI.
+const {
+  total,
+  query,
+  statusFilters,
+  statusFilter,
+  filtered,
+  activeCount,
+  totalRuns,
+  avgAccuracy,
+  pending,
+  error,
+  refresh,
+  isEmpty,
+  formatRuns,
+  accuracyTone,
+} = useMyAgents()
 </script>
 
 <template>
@@ -93,7 +31,7 @@ const accuracyTone = (value: number) =>
         <h1 class="unmodified-font-sans m-0 mb-1 flex items-center gap-2 text-xl font-medium tracking-[-0.01em] text-[#121212]">
           My agents
           <span class="unmodified-font-sans rounded-full border border-[#E3E3E3] bg-white px-2 py-[1px] text-xs font-normal text-[#6B6B6B]">
-            {{ agents.length }}
+            {{ total }}
           </span>
         </h1>
         <p class="unmodified-font-sans m-0 text-sm text-[#6B6B6B]">Agents you have created or installed.</p>
@@ -148,8 +86,36 @@ const accuracyTone = (value: number) =>
       </div>
     </div>
 
+    <!-- Loading -->
+    <div v-if="pending" class="flex flex-col gap-2" aria-label="Loading your agents">
+      <div
+        v-for="n in 3"
+        :key="n"
+        class="rounded-[12px] border border-[#E3E3E3] bg-white px-4 py-3.5"
+      >
+        <div class="h-4 w-1/3 rounded bg-[#F1F1F1]" />
+        <div class="mt-2 h-3 w-2/3 rounded bg-[#F4F4F4]" />
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div v-else-if="error" class="rounded-[12px] border border-[#E3E3E3] bg-white px-4 py-10 text-center">
+      <p class="unmodified-font-sans m-0 text-sm font-medium text-[#121212]">Something went wrong</p>
+      <p class="unmodified-font-sans m-0 mt-1 text-[13px] text-[#6B6B6B]">
+        {{ error }}
+      </p>
+      <button
+        type="button"
+        class="unmodified-font-sans mt-3 cursor-pointer rounded-[9px] border-0 bg-[#121212] px-3 py-[7px] text-[13px] font-medium text-white"
+        @click="refresh()"
+      >
+        Try again
+      </button>
+    </div>
+
     <!-- List -->
-    <div class="overflow-hidden rounded-[12px] border border-[#E3E3E3] bg-white">
+    <div v-else class="overflow-hidden rounded-[12px] border border-[#E3E3E3] bg-white">
+      <template v-if="filtered.length > 0">
       <!-- Column headers (desktop) -->
       <div class="hidden grid-cols-[minmax(0,1fr)_96px_132px_88px_108px_20px] items-center gap-3 border-b border-[#E3E3E3] bg-[#FAFAFA] px-4 py-2 md:grid">
         <span class="unmodified-font-sans text-[11px] font-medium uppercase tracking-[0.06em] text-[#8A8A8A]">Agent</span>
@@ -160,7 +126,7 @@ const accuracyTone = (value: number) =>
         <span />
       </div>
 
-      <div v-if="filtered.length > 0" class="flex flex-col divide-y divide-[#EDEDED]">
+      <div class="flex flex-col divide-y divide-[#EDEDED]">
         <NuxtLink
           v-for="a in filtered"
           :key="a.id"
@@ -231,13 +197,29 @@ const accuracyTone = (value: number) =>
           />
         </NuxtLink>
       </div>
+      </template>
 
-      <!-- Empty state -->
-      <div v-else class="px-4 py-12 text-center">
+      <!-- Empty: search filtered everything out -->
+      <div v-else-if="!isEmpty" class="px-4 py-12 text-center">
         <p class="unmodified-font-sans m-0 text-sm font-medium text-[#121212]">No agents found</p>
         <p class="unmodified-font-sans m-0 mt-1 text-[13px] text-[#6B6B6B]">
           Try a different search, or create a new agent to get started.
         </p>
+      </div>
+
+      <!-- Empty: never created an agent -->
+      <div v-else class="px-4 py-12 text-center">
+        <p class="unmodified-font-sans m-0 text-sm font-medium text-[#121212]">You have not created an agent yet</p>
+        <p class="unmodified-font-sans m-0 mt-1 text-[13px] text-[#6B6B6B]">
+          Describe what your agent should do and Accord will build it for you.
+        </p>
+        <NuxtLink
+          to="/use/agent"
+          class="unmodified-font-sans mt-4 inline-flex items-center gap-1.5 rounded-[9px] bg-[#121212] px-3 py-[7px] text-[13px] font-medium text-white no-underline"
+        >
+          <Plus :size="14" :stroke-width="2" />
+          New agent
+        </NuxtLink>
       </div>
     </div>
 

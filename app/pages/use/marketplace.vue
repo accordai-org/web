@@ -1,136 +1,13 @@
 <script setup lang="ts">
 import { SmoothCorners } from "@lisse/vue";
-import {
-  ArrowUpRight,
-  Bot,
-  Calendar,
-  Code,
-  Globe,
-  Mail,
-  MessageSquare,
-  Music,
-  PenLine,
-  Search,
-  Star,
-  Zap,
-  type LucideIcon,
-} from "@lucide/vue";
+import { ArrowUpRight, Bot, Star } from "@lucide/vue";
+import { useMarketplace } from "~/composables/useMarketplace";
 
 definePageMeta({ layout: "use" });
 
-interface MarketplaceAgent {
-  name: string;
-  type: string;
-  description: string;
-  users: string;
-  author: string;
-  initials: string;
-  icon: LucideIcon;
-  tile: string;
-  iconColor: string;
-}
+// Live list: page -> useMarketplace -> /api/marketplace/agents -> FastAPI.
 
-const agents: MarketplaceAgent[] = [
-  {
-    name: "Support Copilot",
-    type: "Support",
-    description: "Answers tickets, drafts replies, and escalates what needs a human touch.",
-    users: "12.4k",
-    author: "Accord",
-    initials: "AC",
-    icon: MessageSquare,
-    tile: "bg-[#E8ECFF]",
-    iconColor: "text-[#273BE2]",
-  },
-  {
-    name: "Code Reviewer",
-    type: "Coding",
-    description: "Reviews pull requests, flags bugs, and suggests cleaner patterns.",
-    users: "9.8k",
-    author: "DevLoop",
-    initials: "DL",
-    icon: Code,
-    tile: "bg-[#E5F6EC]",
-    iconColor: "text-[#1C7A43]",
-  },
-  {
-    name: "Blog Writer",
-    type: "Writing",
-    description: "Turns rough notes into polished posts in your brand voice.",
-    users: "8.1k",
-    author: "Copyhouse",
-    initials: "CH",
-    icon: PenLine,
-    tile: "bg-[#FDF1E3]",
-    iconColor: "text-[#B25E09]",
-  },
-  {
-    name: "Research Scout",
-    type: "Research",
-    description: "Scans the web and condenses findings into cited briefs.",
-    users: "7.3k",
-    author: "Fieldnotes",
-    initials: "FN",
-    icon: Search,
-    tile: "bg-[#EDE9FE]",
-    iconColor: "text-[#6D28D9]",
-  },
-  {
-    name: "Inbox Zero",
-    type: "Productivity",
-    description: "Triages your inbox, drafts follow-ups, and books the meetings.",
-    users: "6.9k",
-    author: "Accord",
-    initials: "AC",
-    icon: Mail,
-    tile: "bg-[#E0F2F7]",
-    iconColor: "text-[#0E7490]",
-  },
-  {
-    name: "Site Crawler",
-    type: "Data",
-    description: "Extracts structured data from any site on a recurring schedule.",
-    users: "5.4k",
-    author: "Parsewell",
-    initials: "PW",
-    icon: Globe,
-    tile: "bg-[#F3E8FF]",
-    iconColor: "text-[#A21CAF]",
-  },
-  {
-    name: "Standup Bot",
-    type: "Team",
-    description: "Collects async standups and posts a digest every morning.",
-    users: "4.7k",
-    author: "DevLoop",
-    initials: "DL",
-    icon: Calendar,
-    tile: "bg-[#FFE9E9]",
-    iconColor: "text-[#C2410C]",
-  },
-  {
-    name: "Playlist DJ",
-    type: "Fun",
-    description: "Builds playlists from a mood, a genre, or a single track.",
-    users: "3.2k",
-    author: "Waveform",
-    initials: "WF",
-    icon: Music,
-    tile: "bg-[#E7F9EF]",
-    iconColor: "text-[#047857]",
-  },
-  {
-    name: "Quick Automate",
-    type: "Automation",
-    description: "Watches your apps and fires multi-step workflows in seconds.",
-    users: "2.9k",
-    author: "Relay",
-    initials: "RL",
-    icon: Zap,
-    tile: "bg-[#FFF7D6]",
-    iconColor: "text-[#A16207]",
-  },
-];
+const { agents, pending, error, refresh } = useMarketplace();
 </script>
 
 <template>
@@ -141,8 +18,29 @@ const agents: MarketplaceAgent[] = [
       <p class="unmodified-font-sans m-0 text-sm text-[#6B6B6B]">Discover pre-built agents from the community.</p>
     </div>
 
+    <!-- LOADING -->
+    <div
+      v-if="pending"
+      class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3"
+      aria-label="Loading marketplace agents"
+    >
+      <div
+        v-for="n in 6"
+        :key="n"
+        class="flex flex-col rounded-[16px] border border-[#E8E8E8] bg-white p-5"
+      >
+        <div class="mb-3 h-10 w-10 rounded-[12px] bg-[#F1F1F1]" />
+        <div class="h-4 w-2/3 rounded bg-[#F1F1F1]" />
+        <div class="mt-2 h-3 w-full rounded bg-[#F4F4F4]" />
+        <div class="mt-1.5 h-3 w-5/6 rounded bg-[#F4F4F4]" />
+      </div>
+    </div>
+
     <!-- CARD GRID -->
-    <div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3">
+    <div
+      v-else-if="agents.length > 0"
+      class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3"
+    >
       <SmoothCorners
         v-for="agent in agents"
         :key="agent.name"
@@ -215,6 +113,27 @@ const agents: MarketplaceAgent[] = [
           </div>
         </article>
       </SmoothCorners>
+    </div>
+
+    <!-- EMPTY -->
+    <div v-else class="mx-auto flex w-full max-w-md flex-col items-center px-6 py-14 text-center">
+      <Bot
+        :size="22"
+        :stroke-width="1.6"
+        class="text-[#8A8A8A]"
+      />
+      <p class="unmodified-font-sans m-0 mt-3 text-[15px] font-medium text-[#121212]">No agents in the marketplace yet</p>
+      <p class="unmodified-font-sans m-0 mt-1 text-sm text-[#6B6B6B]">Check back soon — community agents will appear here.</p>
+      <p v-if="error" class="unmodified-font-sans m-0 mt-3 text-sm text-[#B42318]">
+        {{ error }}
+        <button
+          type="button"
+          class="ml-1 cursor-pointer font-medium underline"
+          @click="refresh()"
+        >
+          Try again
+        </button>
+      </p>
     </div>
 
     <!-- FOOTNOTE -->

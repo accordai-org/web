@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { SmoothCorners } from "@lisse/vue";
 import { ArrowUp, ChevronRight, Plus, Sparkles, Wrench, X } from "@lucide/vue";
-
-type ChatMessage = {
-  id: number;
-  role: "user" | "assistant";
-  content: string;
-};
+import { useAgentChat } from "~/composables/useAgentChat";
 
 type PickerItem = {
   name: string;
@@ -28,19 +23,20 @@ const skills: PickerItem[] = [
   { name: "Reviewer", desc: "Review work against a style guide" },
 ];
 
-// Mock rotation for now — later swapped for a live backend feed
-// pushing into the same `creationStepIndex` / `currentStepText`.
-const creationSteps = [
-  "Creating your agent",
-  "Planning workflow…",
-  "Connecting tools…",
-  "Setting up memory…",
-];
+// Chat state lives in the composable: page -> useAgentChat -> /api/agent/chat -> FastAPI.
+// The loading pill (`currentStepText`) is driven by backend `step` events,
+// falling back to a local rotation only while the backend sends none.
+const {
+  messages,
+  isLoading,
+  isCreating,
+  currentStepText,
+  requestError,
+  sendAgentMessage,
+  abortAgentCreation,
+} = useAgentChat();
 
 const message = ref("");
-const messages = ref<ChatMessage[]>([]);
-const isLoading = ref(false);
-const requestError = ref("");
 const isPickerOpen = ref(false);
 const activeFlyout = ref<"tools" | "skills" | null>(null);
 const selectedTools = ref<string[]>([]);
@@ -49,22 +45,16 @@ const textareaRef = ref<HTMLTextAreaElement | null>(null);
 const messageListRef = ref<HTMLElement | null>(null);
 const pickerRef = ref<HTMLElement | null>(null);
 
-const creationPhase = ref<"idle" | "creating">("idle");
-const creationStepIndex = ref(0);
-const abortController = ref<AbortController | null>(null);
-const stepTimer = ref<ReturnType<typeof setInterval> | null>(null);
 const pendingDraft = ref("");
 const abortedRef = ref(false);
 
 const hasMessages = computed(() => messages.value.length > 0);
-const hasStarted = computed(() => messages.value.length > 0 || creationPhase.value === "creating");
+const hasStarted = computed(() => messages.value.length > 0 || isCreating.value);
 const hasDraft = computed(() => message.value.trim().length > 0);
 const showHero = computed(() => !hasDraft.value && !hasStarted.value);
 const canSend = computed(
-  () => message.value.trim().length > 0 && !isLoading.value && creationPhase.value === "idle",
+  () => message.value.trim().length > 0 && !isLoading.value && !isCreating.value,
 );
-const isCreating = computed(() => creationPhase.value === "creating");
-const currentStepText = computed(() => creationSteps[creationStepIndex.value] ?? creationSteps[0]!);
 const flyoutItems = computed(() => (activeFlyout.value === "skills" ? skills : tools));
 
 const MAX_TEXTAREA_HEIGHT = 200;
@@ -76,15 +66,6 @@ function adjustHeight() {
   textarea.style.height = `${Math.min(textarea.scrollHeight, MAX_TEXTAREA_HEIGHT)}px`;
 }
 
-function getResponseText(response: unknown) {
-  if (typeof response === "string") return response;
-  if (response && typeof response === "object" && "message" in response) {
-    const text = (response as { message?: unknown }).message;
-    if (typeof text === "string") return text;
-  }
-  return "Pointer returned an empty response. Please try again.";
-}
-
 async function scrollToBottom() {
   await nextTick();
   const list = messageListRef.value;
@@ -92,25 +73,7 @@ async function scrollToBottom() {
   list.scrollTo({ top: list.scrollHeight, behavior: "smooth" });
 }
 
-function startMockSteps() {
-  stopMockSteps();
-  creationStepIndex.value = 0;
-  stepTimer.value = setInterval(() => {
-    creationStepIndex.value = (creationStepIndex.value + 1) % creationSteps.length;
-  }, 2000);
-}
-
-function stopMockSteps() {
-  if (stepTimer.value) {
-    clearInterval(stepTimer.value);
-    stepTimer.value = null;
-  }
-}
-
-function morphBackToInput() {
-  stopMockSteps();
-  abortController.value = null;
-  creationPhase.value = "idle";
+function restoreDraft() {
   message.value = pendingDraft.value;
   pendingDraft.value = "";
   nextTick(() => {
@@ -121,8 +84,8 @@ function morphBackToInput() {
 
 function abortCreation() {
   abortedRef.value = true;
-  abortController.value?.abort();
-  morphBackToInput();
+  abortAgentCreation();
+  restoreDraft();
 }
 
 async function sendMessage() {
@@ -133,35 +96,21 @@ async function sendMessage() {
   isPickerOpen.value = false;
   activeFlyout.value = null;
   pendingDraft.value = userMessage;
-  messages.value.push({ id: Date.now(), role: "user", content: userMessage });
   message.value = "";
-  isLoading.value = true;
-  creationPhase.value = "creating";
-  creationStepIndex.value = 0;
-  startMockSteps();
-  abortController.value = new AbortController();
   await nextTick(adjustHeight);
   await scrollToBottom();
   try {
-    const response = await $fetch<unknown>("/api/apps/chat", {
-      method: "POST",
-      body: { userMessage },
-      signal: abortController.value.signal,
-    });
-    messages.value.push({
-      id: Date.now() + 1,
-      role: "assistant",
-      content: getResponseText(response),
+    await sendAgentMessage(userMessage, {
+      tools: selectedTools.value,
+      skills: selectedSkills.value,
     });
     pendingDraft.value = "";
-    morphBackToInput();
   } catch (error) {
     if (abortedRef.value) return;
     if (error instanceof DOMException && error.name === "AbortError") return;
-    requestError.value = "Pointer could not respond right now. Please try again.";
-    morphBackToInput();
+    // `requestError` is already set inside the composable — restore the draft for retry.
+    restoreDraft();
   } finally {
-    isLoading.value = false;
     await scrollToBottom();
   }
 }
@@ -213,8 +162,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener("mousedown", handleClickOutside);
   document.removeEventListener("keydown", handleEscape);
-  stopMockSteps();
-  abortController.value?.abort();
+  abortAgentCreation();
 });
 
 watch(message, () => nextTick(adjustHeight));
