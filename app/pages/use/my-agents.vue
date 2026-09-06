@@ -36,13 +36,6 @@ const {
         </h1>
         <p class="unmodified-font-sans m-0 text-sm text-[#6B6B6B]">Agents you have created or installed.</p>
       </div>
-      <NuxtLink
-        to="/use/agent"
-        class="unmodified-font-sans flex shrink-0 items-center gap-1.5 rounded-[9px] bg-[#121212] px-3 py-[7px] text-[13px] font-medium text-white no-underline transition-colors duration-100 hover:bg-[#2A2A2A]"
-      >
-        <Plus :size="14" :stroke-width="2" />
-        New agent
-      </NuxtLink>
     </div>
 
     <!-- Summary strip -->
